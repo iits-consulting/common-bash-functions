@@ -24,6 +24,10 @@ function cleanup_pods(){
     kubectl delete pods $(kubectl get pod --all-namespaces -o jsonpath='{.items[?(@.status.containerStatuses[*].state.waiting.reason=="ImagePullBackOff")].metadata.name}')
 }
 
+function get_secrets() {
+  kubectl get secrets $1 -o yaml | yq '.data | map_values(@base64d)'
+}
+
 function check_cluster_for_unsigned_images() {
   # Download public key for cosign verification
   curl -s https://raw.githubusercontent.com/iits-consulting/charts/main/charts/iits-kyverno-policies/pub-keys/pub.key -o ./pub.key
@@ -49,6 +53,9 @@ alias k="kubectl"
 complete -F __start_kubectl k
 alias kns="kubectl config set-context --current --namespace "
 alias kenv="kubectl config current-context"
+alias kubens='kubectl config set-context --current --namespace '
+alias kubeEnv="kubectl config current-context"
 alias updateArgoCharts="helm plugin update iits-argo-charts-updater && helm iits-argo-charts-updater"
 alias updateCharter="helm plugin update iits-chart-creator && helm iits-chart-creator -v"
 alias charter='helm iits-chart-creator infrastructure-charts'
+alias fwd="sudo kubefwd svc -n $1"
