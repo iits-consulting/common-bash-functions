@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function argo(){
+function argo() {
   local ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
   echo "Username=admin, password=$ARGOCD_PASSWORD"
 
@@ -18,7 +18,7 @@ function traefik() {
   kubectl -n routing port-forward $(kubectl get pod -n routing -o jsonpath="{.items[0].metadata.name}") ${localhost_port}:9000
 }
 
-function cleanup_pods(){
+function cleanup_pods() {
     kubectl delete pods --field-selector=status.phase==Succeeded -A;
     kubectl delete pods --field-selector status.phase=Failed -A;
     kubectl delete pods $(kubectl get pod --all-namespaces -o jsonpath='{.items[?(@.status.containerStatuses[*].state.waiting.reason=="ImagePullBackOff")].metadata.name}')
@@ -47,6 +47,16 @@ function check_cluster_for_unsigned_images() {
       fi
   done
   rm pub.key
+}
+
+function list_iits_alias() {
+    iits_alias=$(wget -qO - https://raw.githubusercontent.com/victorgetz/common-bash-functions/main/bash-functions.sh)
+
+    echo "Functions:"
+    echo "${iits_alias}" | awk '/^function/ {print $2}' | cut -d'(' -f 1
+    echo "---"
+    echo "Aliases:"
+    echo "${iits_alias}" | awk '/^alias/ {print $2}' | cut -d'=' -f 1
 }
 
 alias k="kubectl"
