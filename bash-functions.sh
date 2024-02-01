@@ -50,8 +50,7 @@ function check_cluster_for_unsigned_images() {
 }
 
 function list_iits_alias() {
-    iits_alias=$(wget -qO - https://raw.githubusercontent.com/victorgetz/common-bash-functions/main/bash-functions.sh)
-
+    iits_alias=$(wget --no-cookies --no-cache -qO - https://raw.githubusercontent.com/victorgetz/common-bash-functions/main/bash-functions.sh)
     echo "Functions:"
     echo "${iits_alias}" | awk '/^function/ {print $2}' | cut -d'(' -f 1
     echo "---"
