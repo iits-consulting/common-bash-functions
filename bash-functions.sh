@@ -18,6 +18,11 @@ function traefik() {
   kubectl -n routing port-forward $(kubectl get pod -n routing -o jsonpath="{.items[0].metadata.name}") ${localhost_port}:9000
 }
 
+function delete_released_pv() {
+  kubectl get pv -o json | jq -r '.items[] | select(.status.phase == "Released") | .metadata.name' | xargs -n 1 kubectl delete pv
+}
+
+
 function cleanup_pods() {
     kubectl delete pods --field-selector=status.phase==Succeeded -A;
     kubectl delete pods --field-selector status.phase=Failed -A;
