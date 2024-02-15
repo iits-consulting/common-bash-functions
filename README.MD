@@ -5,7 +5,7 @@ This bash script provides several utility functions and aliases for Kubernetes a
 ## Usage
 adjust your ~/.bashrc and add this
 ```bash
-source <(wget --no-cookies --no-cache -qO - https://raw.githubusercontent.com/victorgetz/common-bash-functions/main/bash-functions.sh)
+source <(wget --no-cookies --no-cache -qO - https://raw.githubusercontent.com/iits-consulting/common-bash-functions/main/bash-functions.sh)
 ```
 
 You can then list the alias like this:
