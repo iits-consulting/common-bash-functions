@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function argo() {
-  local ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-secret -o jsonpath="{.data.password}" | base64 -d)
+  local ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-secret -o jsonpath="{.data.admin.password}" | base64 -d)
   echo "Username=admin, password=$ARGOCD_PASSWORD"
 
 
@@ -10,12 +10,6 @@ function argo() {
   else
     open http://localhost:8080/argocd && kubectl -n argocd port-forward svc/argocd-server 8080:80
   fi
-}
-
-function traefik() {
-  local localhost_port="9000"
-  echo "Open \"http://localhost:${localhost_port}/dashboard/#/\" to see your treafik dashboard"
-  kubectl -n routing port-forward $(kubectl get pod -n routing -o jsonpath="{.items[0].metadata.name}") ${localhost_port}:9000
 }
 
 function delete_released_pv() {
