@@ -1,7 +1,8 @@
 #!/bin/bash
 
 function argo() {
-  local ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d)
+
+  local ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-secret -o jsonpath="{.data.admin\.password}" | base64 -d)
   echo "Username=admin, password=$ARGOCD_PASSWORD"
 
 
